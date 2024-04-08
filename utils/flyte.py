@@ -19,7 +19,7 @@ class Output:
     name: str
     type: type
 
-def run_domino_job(
+def DominoTask(
     name: str, 
     command: str, 
     environment: str = None,

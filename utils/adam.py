@@ -1,5 +1,5 @@
 import os
-from .flyte import run_domino_job, Input, Output
+from .flyte import DominoTask, Input, Output
 from typing import List
 from flytekitplugins.domino.task import DominoJobConfig, DominoJobTask
 from flytekit import workflow, task
@@ -42,7 +42,7 @@ def create_adam_data(
     # Define outputs
     outputs = [Output(name="adam", type=FlyteFile)]
 
-    results = run_domino_job(
+    results = DominoTask(
         name=f"Create {name} dataset",
         command=command, 
         environment=environment,

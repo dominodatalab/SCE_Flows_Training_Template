@@ -1,5 +1,5 @@
 import os
-from .flyte import run_domino_job, Input, Output
+from .flyte import DominoTask, Input, Output
 from .adam import ADAM
 from typing import List
 from flytekitplugins.domino.task import DominoJobConfig, DominoJobTask
@@ -32,7 +32,7 @@ def create_tfl_report(
     # Define outputs
     outputs = [Output(name="report", type=FlyteFile)]
 
-    results = run_domino_job(
+    results = DominoTask(
         name=f"Create {name} report",
         command=command, 
         environment=environment,
