@@ -69,13 +69,15 @@ def DominoTask(
 
     input_types = {}
     input_values = {}
-    for input in inputs:
-        input_types[input.name] = input.type
-        input_values[input.name] = input.value
+    if inputs is not None:
+        for input in inputs:
+            input_types[input.name] = input.type
+            input_values[input.name] = input.value
 
     output_types = {}
-    for output in outputs:
-        output_types[output.name] = output.type
+    if outputs is not None:
+        for output in outputs:
+            output_types[output.name] = output.type
 
     job = DominoJobTask(
         name,
