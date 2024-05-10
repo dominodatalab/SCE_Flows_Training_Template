@@ -1,6 +1,6 @@
 import os
 from .flyte import DominoTask, Input, Output
-from typing import List
+from typing import List, TypeVar
 from flytekitplugins.domino.task import DominoJobConfig, DominoJobTask
 from flytekit import workflow, task
 from flytekit.types.file import FlyteFile
@@ -11,7 +11,7 @@ from dataclasses import dataclass
 class ADAM:
     """Class for defining an ADAM dataset"""
     filename: str
-    data: FlyteFile
+    data: FlyteFile[TypeVar("sas7bdat")]
 
 def create_adam_data(
     name: str, 
@@ -37,10 +37,10 @@ def create_adam_data(
     inputs.append(Input(name="sdtm_data_path", type=str, value=sdtm_data_path))
     if dependencies:
         for dataset in dependencies:
-            inputs.append(Input(name=dataset.filename, type=FlyteFile, value=dataset.data))
+            inputs.append(Input(name=dataset.filename, type=FlyteFile[TypeVar("sas7bdat")], value=dataset.data))
 
     # Define outputs
-    outputs = [Output(name="adam", type=FlyteFile)]
+    outputs = [Output(name="adam", type=FlyteFile[TypeVar("sas7bdat")])]
 
     results = DominoTask(
         name=f"Create {name} dataset",
