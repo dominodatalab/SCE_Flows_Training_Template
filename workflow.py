@@ -3,10 +3,12 @@ from flytekit import workflow
 from flytekit.types.file import FlyteFile
 from utils.adam import create_adam_data
 from utils.tfl import create_tfl_report
-from typing import TypeVar
+from typing import TypeVar, NamedTuple
+
+tfl_outputs = NamedTuple("tfl_outputs", t_ae_rel=FlyteFile[TypeVar("pdf")], t_vscat=FlyteFile[TypeVar("pdf")])
 
 @workflow
-def sce_workflow(sdtm_data_path: str) -> (FlyteFile[TypeVar("pdf")], FlyteFile[TypeVar("pdf")]):
+def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     """
     This script mocks a sample clinical trial using Domino Flows. 
 
@@ -61,4 +63,4 @@ def sce_workflow(sdtm_data_path: str) -> (FlyteFile[TypeVar("pdf")], FlyteFile[T
         hardware_tier= "Small",
         dependencies=[advs]
     )
-    return t_ae_rel, t_vscat
+    return tfl_outputs(t_ae_rel=t_ae_rel, t_vscat=t_vscat)

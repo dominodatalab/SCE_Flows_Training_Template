@@ -30,10 +30,8 @@ def DominoTask(
     outputs: List[Output] = None,
 ) -> DominoJobTask:
 
-    api_key=os.environ.get('DOMINO_USER_API_KEY')
     project_owner = os.environ.get("DOMINO_PROJECT_OWNER")
     project_name = os.environ.get("DOMINO_PROJECT_NAME")
-
     domino = Domino(f"{project_owner}/{project_name}")
 
     # Get environment ID
@@ -54,12 +52,16 @@ def DominoTask(
     else:
         hardwareTierId = domino.get_hardware_tier_id_from_name(hardware_tier)
 
+    # Set main git repo reference
+    main_repo_git_ref = None
+    if os.environ.get("DOMINO_IS_GIT_BASED"):
+        main_repo_git_ref = GitRef(Type="head")
+
     job_config = DominoJobConfig(
         Title=name,
-        ApiKey=api_key,
         Command=command,
         CommitId=dfs_commit_id, 
-        MainRepoGitRef=GitRef(Type="head"), # TODO: Allow user to change git branch and commit. For now, we will use
+        MainRepoGitRef=main_repo_git_ref, # TODO: Allow user to change git branch and commit. For now, we will use the head reference.
         EnvironmentId=environmentId,
         EnvironmentRevisionSpec=None, # TODO: Allow user to specify revision ID. For now, it just takes the active revision.
         HardwareTierId=hardwareTierId,

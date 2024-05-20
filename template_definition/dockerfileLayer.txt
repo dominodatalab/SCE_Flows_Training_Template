@@ -1,0 +1,6 @@
+USER root
+# Extend SAS logout time
+RUN echo ""export java_global_option_server_servlet_session_timeout="-Dserver.servlet.session.timeout=10080m" >> /opt/sas/viya/config/etc/sysconfig/sasstudio.conf""
+RUN cat /opt/sas/viya/config/etc/sysconfig/sasstudio.conf
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
