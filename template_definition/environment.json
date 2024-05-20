@@ -1,7 +1,9 @@
 {
     "title": "SAS Analytics Pro",
+    "id": "SAS Analytics Pro",
     "description": "Environment for running SAS scripts in Domino",
     "environmentBaseImage": "quay.io/domino/joyce-sas/sas-apro:latest",
-    "created":"2024-05-20T08:22:52.00Z"
+    "dockerfile": "USER root \nRUN echo \"\"export java_global_option_server_servlet_session_timeout=\"-Dserver.servlet.session.timeout=10080m\" >> /opt/sas/viya/config/etc/sysconfig/sasstudio.conf\"\" \nRUN cat /opt/sas/viya/config/etc/sysconfig/sasstudio.conf \nRUN ln -s /usr/bin/python3 /usr/bin/python",
+    "created":"2024-05-20T08:22:52.00Z",
+    "workspaceTools": "sas:\n  title: \"SAS APro\"\n  iconUrl: \"https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg\"\n  start: [ \"/opt/domino/workspaces/sas/start\" ]\n  httpProxy:\n    port: 7080\n    rewrite: false\n    internalPath: \"/{{ownerUsername}}/{{projectName}}/{{sessionPathComponent}}/{{runId}}/\"\n    requireSubdomain: false"
 }
-

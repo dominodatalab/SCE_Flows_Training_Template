@@ -25,7 +25,6 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     adsl = create_adam_data(
         name="ADSL", 
         command="sas -stdio prod/adsl.sas",
-        environment="SAS Analytics Pro", # Optional parameter. If not set, then the default for the project will be used.
         hardware_tier= "Small", # Optional parameter. If not set, then the default for the project will be used.
         sdtm_data_path=sdtm_data_path # Note this this is simply the input value taken in from the command line argument
     )
@@ -33,7 +32,6 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     adae = create_adam_data(
         name="ADAE", 
         command="sas -stdio prod/adae.sas", 
-        environment="SAS Analytics Pro",
         hardware_tier= "Small",
         sdtm_data_path=sdtm_data_path, 
         dependencies=[adsl] # Note how this is the output from the previous task
@@ -42,7 +40,6 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     advs = create_adam_data(
         name="ADVS", 
         command="sas -stdio prod/advs.sas", 
-        environment="SAS Analytics Pro",
         hardware_tier= "Small",
         sdtm_data_path=sdtm_data_path, 
         dependencies=[adsl, adae]
@@ -51,7 +48,6 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     t_ae_rel = create_tfl_report(
         name="T_AE_REL", 
         command="sas -stdio prod/t_ae_rel.sas", 
-        environment="SAS Analytics Pro",
         hardware_tier= "Small",
         dependencies=[adae]
     )
@@ -59,7 +55,6 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     t_vscat = create_tfl_report(
         name="T_VSCAT", 
         command="sas -stdio prod/t_ae_rel.sas", 
-        environment="SAS Analytics Pro",
         hardware_tier= "Small",
         dependencies=[advs]
     )

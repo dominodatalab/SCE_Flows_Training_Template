@@ -33,7 +33,7 @@
     "recommended": false,
     "prerequisites": [
       {
-        "value": "The flow in this project needs to be submitted from the V2 Flyte Env, which are included in this deployment.",
+        "value": "The flow in this project needs to be submitted from the Domino Standard Environment",
         "link": "https://github.com/ddl-jwu/domino-sce-flows/blob/main/README.md"
       }
     ],
@@ -42,11 +42,13 @@
       "value": "The default hardware tier should be sufficient to run this sample",
       "link": null
     },
-    "environmentKey": null,
-    "environmentReqs": {
-      "value": "SAS Analytics Pro",
-      "link": "https://github.com/ddl-jwu/domino-sce-flows/blob/main/README.md"
-    },
+    "dependencies":[
+      {
+         "templateName":"SAS Analytics Pro",
+         "created":"2024-05-20T08:22:52.00Z",
+         "kind":"Environment"
+      }
+    ],
     "importedRepositories": null,
     "supportedDominoVersions": [
       "5.11.0"
