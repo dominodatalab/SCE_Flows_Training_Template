@@ -6,7 +6,10 @@ This repo mocks a sample SCE clinical trial using Domino Flows. The example flow
 2. Produces a series of ADAM datasets.
 3. Uses the ADAM datasets to generate a collection of TFL report as the `outputs`.
 
-To run the flow, execute the command below through a terminal in your workspace: 
+To run the flow:
+
+1. Startup a workspace using the Domino Standard Environment.
+2. Execute the command below through a terminal in your workspace.
 
 ```
 pyflyte run --remote workflow.py sce_workflow --sdtm_data_path "/mnt/code/data/sdtm-blind"
@@ -41,7 +44,6 @@ Here is a sample code snippet of how the method can be used:
 adsl = create_adam_data(
     name="ADSL", 
     command="sas -stdio prod/adsl.sas",
-    environment="SAS Analytics Pro", 
     hardware_tier= "Small", 
     sdtm_data_path=sdtm_data_path 
 )
@@ -49,7 +51,6 @@ adsl = create_adam_data(
 adae = create_adam_data(
     name="ADAE", 
     command="sas -stdio prod/adae.sas", 
-    environment="SAS Analytics Pro",
     hardware_tier= "Small",
     sdtm_data_path=sdtm_data_path, 
     dependencies=[adsl] # Note how this is the output from the previous task
@@ -59,7 +60,6 @@ Explaining the parameters in more detail:
 
 - `name`: Name for the dataset that will be produced.
 - `command`: Command that will be used when triggering the Domino job. This should point to the SAS file you want to execute.
-- `environment`: Name of the environment to use in the job. If not specified, this will point to the default environment.
 - `hardware_tier`: Name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
 - `sdtm_data_path`: Filepath location of the SDTM data. This parameter will be taken into the task as an input, which can be parsed and used as a parameter within the SAS script during the Domino job.
 - `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
@@ -80,7 +80,6 @@ Here is a sample code snippet of how the method can be used:
 t_ae_rel = create_tfl_report(
     name="T_AE_REL", 
     command="sas -stdio prod/t_ae_rel.sas", 
-    environment="SAS Analytics Pro",  
     hardware_tier="small-k8s",
     dependencies=[adae]
 )
@@ -89,7 +88,6 @@ Explaining the parameters in more detail:
 
 - `name`: A name for the task
 - `command`: The command that will be use when triggering the Domino job. This should point to the SAS file you want to execute.
-- `environment`: The name of the environment to use in the job. If not specified, this will point to the default environment.
 - `hardware_tier`: The name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
 - `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
 
@@ -98,3 +96,13 @@ Within the SAS script that gets executed by this method:
 - You can get the `adam_dataset` dependencies by loading the contents of the file located at `/workflow/inputs/<NAME OF DATASET>`
 - The output report must be written to `workflow/outputs/report` in order for it to be returned and tracked properly.
 
+# Environment Requirements
+
+The project requires two environments:
+
+1. The `Domino Standard Environment` which contains the necessary packages to trigger the flow.
+2. A `SAS Analytics Pro` environment which contains the necessary packages to run the SAS jobs that get triggered by the flow. The environment definition is included in this template and will be automatically created in the deployment if it doesn't already exist.
+
+# Hardware Requirements
+
+This project works with a standard small-sized hardware tier, such as the small-k8s tier on all Domino deployments.
