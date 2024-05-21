@@ -9,7 +9,7 @@
       "Flows"
     ],
     "mainRepository": {
-      "uri": "https://github.com/ddl-jwu/domino-sce-flows",
+      "uri": "https://github.com/dominodatalab/domino-sce-flows",
       "ref": {
         "type": "commitId",
         "value": "362fcd36724e0f8e7fe9ea23de05cfca4182e85a"
@@ -23,20 +23,15 @@
     "created":"2024-05-20T08:22:52.00Z",
     "license": {
       "name": "Apache 2.0",
-      "link": "https://github.com/ddl-jwu/domino-sce-flows?tab=Apache-2.0-1-ov-file"
+      "link": "https://github.com/dominodatalab/domino-sce-flows?tab=Apache-2.0-1-ov-file"
     },
     "data": {
       "name": "This template uses mock SDTM data which are included with the repository.",
-      "link": "https://github.com/ddl-jwu/domino-sce-flows/tree/main/data"
+      "link": "https://github.com/dominodatalab/domino-sce-flows/tree/main/data"
     },
     "dataFormat": "SAS7BDAT",
     "recommended": false,
-    "prerequisites": [
-      {
-        "value": "The flow in this project needs to be submitted from the Domino Standard Environment",
-        "link": "https://github.com/ddl-jwu/domino-sce-flows/blob/main/README.md"
-      }
-    ],
+    "prerequisites": null,
     "goals": null,
     "hardwareTier": {
       "value": "This project works with a standard small-sized hardware tier, such as the small-k8s tier on all Domino deployments.",
