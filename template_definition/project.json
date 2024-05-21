@@ -50,7 +50,7 @@
     ],
     "projectSettings": null,
     "test": {
-      "test_command": "pyflyte run --remote workflow.py sce_workflow --sdtm_data_path "/mnt/code/data/sdtm-blind"",
+      "test_command": "pyflyte run --remote workflow.py sce_workflow --sdtm_data_path \"/mnt/code/data/sdtm-blind\"",
       "hardware_tier_id": "small-k8s"
     }
 }
