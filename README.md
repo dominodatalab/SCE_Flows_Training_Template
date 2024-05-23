@@ -21,11 +21,11 @@ pyflyte run --remote workflow.py sce_workflow --sdtm_data_path "/mnt/code/data/s
 
 Once you run the command, a direct link to the Flyte console should be returned:
 
-![Execution Link](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/execution-link.png)
+![Execution Link](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/execution-link.png?raw=true)
 
 Upon clicking on the link, you should be navigated to a page where you can monitor the execution:
 
-![Monitor](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/monitor.png)
+![Monitor](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/monitor.png?raw=true)
 
 ## Flow Breakdown
 
