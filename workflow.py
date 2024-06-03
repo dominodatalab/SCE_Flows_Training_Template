@@ -24,14 +24,14 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     # Create task that generates ADSL dataset. This will run a unique Domino job and return its outputs.
     adsl = create_adam_data(
         name="ADSL", 
-        command="sas -stdio prod/adsl.sas",
+        command="prod/adsl.sas",
         hardware_tier= "Small", # Optional parameter. If not set, then the default for the project will be used.
         sdtm_data_path=sdtm_data_path # Note this this is simply the input value taken in from the command line argument
     )
     # Create task that generates ADAE dataset. 
     adae = create_adam_data(
         name="ADAE", 
-        command="sas -stdio prod/adae.sas", 
+        command="prod/adae.sas", 
         hardware_tier= "Small",
         sdtm_data_path=sdtm_data_path, 
         dependencies=[adsl] # Note how this is the output from the previous task
@@ -39,7 +39,7 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     # Create task that generates ADVS dataset. 
     advs = create_adam_data(
         name="ADVS", 
-        command="sas -stdio prod/advs.sas", 
+        command="prod/advs.sas", 
         hardware_tier= "Small",
         sdtm_data_path=sdtm_data_path, 
         dependencies=[adsl, adae]
@@ -47,14 +47,14 @@ def sce_workflow(sdtm_data_path: str) -> tfl_outputs:
     # Create task that generates TFL report from ADAE dataset.
     t_ae_rel = create_tfl_report(
         name="T_AE_REL", 
-        command="sas -stdio prod/t_ae_rel.sas", 
+        command="prod/t_ae_rel.sas", 
         hardware_tier= "Small",
         dependencies=[adae]
     )
     # Create task that generates TFL report from ADVS dataset
     t_vscat = create_tfl_report(
         name="T_VSCAT", 
-        command="sas -stdio prod/t_ae_rel.sas", 
+        command="prod/t_ae_rel.sas", 
         hardware_tier= "Small",
         dependencies=[advs]
     )
