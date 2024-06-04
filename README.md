@@ -12,7 +12,7 @@ To run the flow:
 2. Execute the command below through a terminal in your workspace.
 
 ```
-pyflyte run --remote workflow.py sce_workflow --sdtm_data_path "/mnt/code/data/sdtm-blind"
+pyflyte run --remote workflow.py sce_workflow --sdtm_data_path /mnt/code/data/sdtm-blind
 ```
 - The `pyflyte run` command will register the flow and trigger an execution.
 - The `--remote` option enables running the execution remotely (outside of the workspace).

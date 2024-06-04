@@ -1,7 +1,7 @@
 import os
-from .flyte import DominoTask, Input, Output
 from typing import List, TypeVar
 from flytekitplugins.domino.task import DominoJobConfig, DominoJobTask
+from flytekitplugins.domino.helpers import Input, Output, run_domino_job_task
 from flytekit import workflow, task
 from flytekit.types.file import FlyteFile
 from flytekit.types.directory import FlyteDirectory
@@ -42,13 +42,14 @@ def create_adam_data(
     # Define outputs
     outputs = [Output(name="adam", type=FlyteFile[TypeVar("sas7bdat")])]
 
-    results = DominoTask(
-        name=f"Create {name} dataset",
-        command=command, 
-        environment=environment,
-        hardware_tier=hardware_tier,
+    results = run_domino_job_task(
+        flyte_task_name=f"Create {name} dataset",
+        command=command,
+        environment_name=environment,
+        hardware_tier_name=hardware_tier,
         inputs=inputs,
-        outputs=outputs
+        output_specs=outputs,
+        use_project_defaults_for_omitted=True
     )
 
     return ADAM(filename=f"{name}.sas7bdat".lower(), data=results["adam"])
