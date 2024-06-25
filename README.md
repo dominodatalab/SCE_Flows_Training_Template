@@ -62,6 +62,7 @@ Explaining the parameters in more detail:
 
 - `name`: Name for the dataset that will be produced.
 - `command`: Command that will be used when triggering the Domino job. This should point to the SAS file you want to execute.
+- `environment`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
 - `hardware_tier`: Name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
 - `sdtm_data_path`: Filepath location of the SDTM data. This parameter will be taken into the task as an input, which can be parsed and used as a parameter within the SAS script during the Domino job.
 - `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
