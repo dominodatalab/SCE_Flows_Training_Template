@@ -44,13 +44,15 @@ Here is a sample code snippet of how the method can be used:
 adsl = create_adam_data(
     name="ADSL", 
     command="sas -stdio prod/adsl.sas",
+    environment="SAS Analytics Pro",
     hardware_tier= "Small", 
     sdtm_data_path=sdtm_data_path 
 )
 # Create task that generates ADAE dataset. This takes the output from the previous task as an input.
 adae = create_adam_data(
     name="ADAE", 
-    command="sas -stdio prod/adae.sas", 
+    command="sas -stdio prod/adae.sas",
+    environment="SAS Analytics Pro", 
     hardware_tier= "Small",
     sdtm_data_path=sdtm_data_path, 
     dependencies=[adsl] # Note how this is the output from the previous task
