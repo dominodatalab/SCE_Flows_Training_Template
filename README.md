@@ -105,7 +105,7 @@ Within the SAS script that gets executed by this method:
 The project requires two environments:
 
 1. The `Domino Standard Environment` which contains the necessary packages to trigger the flow.
-2. A `SAS Analytics Pro` environment which contains the necessary packages to run the SAS jobs that get triggered by the flow. The environment definition is included in this template and will be automatically created in the deployment if it doesn't already exist.
+2. A `SAS Analytics Pro` environment which is used by each individual Flow task. 
 
 # Hardware Requirements
 
