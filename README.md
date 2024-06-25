@@ -8,8 +8,9 @@ This repo mocks a sample SCE clinical trial using Domino Flows. The example flow
 
 To run the flow:
 
-1. Startup a workspace using the Domino Standard Environment.
-2. Execute the command below through a terminal in your workspace.
+1. Startup a VS Code workspace using the Domino Standard Environment.
+2. Open the terminal and cd into /mnt/code in your directory. 
+3. Execute the command below through a terminal in your workspace.
 
 ```
 pyflyte run --remote workflow.py ADaM_TFL --sdtm_data_path /mnt/code/data/sdtm-blind
