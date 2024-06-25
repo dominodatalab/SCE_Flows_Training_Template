@@ -12,11 +12,11 @@ To run the flow:
 2. Execute the command below through a terminal in your workspace.
 
 ```
-pyflyte run --remote workflow.py sce_workflow --sdtm_data_path /mnt/code/data/sdtm-blind
+pyflyte run --remote workflow.py ADaM_TFL --sdtm_data_path /mnt/code/data/sdtm-blind
 ```
 - The `pyflyte run` command will register the flow and trigger an execution.
 - The `--remote` option enables running the execution remotely (outside of the workspace).
-- `workflow.py` / `sce_workflow` specifies the file and method that contains the flow definition.
+- `workflow.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
 - The `--sdtm_data_path` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path.
 
 Once you run the command, a direct link to the Flyte console should be returned:
@@ -29,7 +29,7 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 ## Flow Breakdown
 
-The flow definition is located in the file named `workflow.py` under a method called `sce_workflow`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method.
+The flow definition is located in the file named `workflow.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method.
 
 Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will utltimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
