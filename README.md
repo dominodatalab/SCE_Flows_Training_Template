@@ -32,7 +32,7 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 The flow definition is located in the file named `workflow.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method.
 
-Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will utltimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
+Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
 **create_adam_data()**
 
