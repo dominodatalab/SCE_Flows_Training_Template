@@ -23,7 +23,7 @@ def ADaM_TFL(sdtm_data_path: str) -> tfl_outputs:
     """
     # Create task that generates ADSL dataset. This will run a unique Domino job and return its outputs.
     adsl = create_adam_data(
-        name="ADSL", 
+        name="ADSL NEW NAME TEST", 
         command="prod/adsl.sas",
         environment="SAS Analytics Pro",
         hardware_tier= "Small", # Optional parameter. If not set, then the default for the project will be used.
