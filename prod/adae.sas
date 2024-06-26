@@ -9,6 +9,9 @@ options dlcreatedir;
 libname inputs "/workflow/inputs"; /* All inputs live in this directory at workflow/inputs/<NAME OF INPUT> */ 
 libname outputs "/workflow/outputs"; /* All outputs must go to this directory at workflow/inputs/<NAME OF OUTPUT>y */ 
 
+/* Mandatory step to add sas7bdat file extension to inputs */
+x "mv /workflow/inputs/adsl_sas7bdat /workflow/inputs/adsl.sas7bdat";
+
 /* Read in the SDTM data path input */
 data _null__;
     infile '/workflow/inputs/sdtm_data_path' truncover;

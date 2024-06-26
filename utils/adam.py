@@ -52,7 +52,7 @@ def create_adam_data(
         use_project_defaults_for_omitted=True
     )
 
-    return ADAM(filename=f"{name}.sas7bdat".lower(), data=results["adam"])
+    return ADAM(filename=f"{name}_sas7bdat".lower(), data=results["adam"])
 
 
  
