@@ -12,7 +12,7 @@
       "uri": "https://github.com/dominodatalab/domino-sce-flows",
       "ref": {
         "type": "commitId",
-        "value": "8d5dc54b20d741508a05e3fb92c5cbf8babff652"
+        "value": "4993708a9f74e98878491f9adff9cb81418c8979"
       },
       "serviceProvider": "github"
     },
@@ -31,28 +31,19 @@
     },
     "dataFormat": "SAS7BDAT",
     "recommended": false,
-    "prerequisites": null,
+    "prerequisites": {
+      "value": "This template requires a SAS-enabled environment that must be created manually. See README for additional instructions.",
+      "link": "https://docs.dominodatalab.com/en/latest/user_guide/e7805a/sas-on-domino/#_sas_analytics_for_containers_on_domino"
+    },
     "goals": null,
     "hardwareTier": {
-      "value": "This project works with a standard small-sized hardware tier, such as the small-k8s tier on all Domino deployments.",
+      "value": "This project works with the default `small-k8s` hardware tier that come with all Domino deployments.",
       "link": null
     },
-    "dependencies":[
-      {
-         "templateName":"SAS Analytics Pro",
-         "created":"2024-05-20T08:22:52.00Z",
-         "kind":"Environment"
-      }
-    ],
     "importedRepositories": null,
     "supportedDominoVersions": [
       "5.11.0"
     ],
-    "projectSettings": null,
-    "test": {
-      "test_command": "pyflyte run --remote workflow.py sce_workflow --sdtm_data_path /mnt/code/data/sdtm-blind",
-      "hardware_tier_id": "small-k8s",
-      "useDeploymentDefaultEnv": true
-    }
+    "projectSettings": null
 }
   
