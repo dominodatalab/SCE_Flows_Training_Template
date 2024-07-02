@@ -16,7 +16,7 @@ To run the flow:
 pyflyte run --remote workflow.py ADaM_TFL --sdtm_data_path /mnt/code/data/sdtm-blind
 ```
 - The `pyflyte run` command will register the flow and trigger an execution.
-- The `--remote` option enables running the execution remotely (outside of the workspace).
+- The `--remote` option enables running the execution remotely (outside of the workspace and in Flows). 
 - `workflow.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
 - The `--sdtm_data_path` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path.
 
