@@ -31,7 +31,7 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 ## Flow Breakdown
 
-The flow definition is located in the file named `workflow.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method.
+The flow definition is located in the file named `workflow.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the Git repo. In reality, this would likely exist in a Domino Dataset snapshot which your parameter would point to instead.
 
 Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
