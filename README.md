@@ -35,6 +35,8 @@ The flow definition is located in the file named `workflow.py` under a method ca
 
 Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
+To see how you would construct a standard Flow task i.e. without the ADaM or TFL helper methods, see the [Domino Docs](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/). 
+
 **create_adam_data()**
 
 This method provides a standardized interface for triggering a SAS script that produces an ADAM dataset. 
