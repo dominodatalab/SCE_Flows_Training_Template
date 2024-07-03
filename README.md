@@ -7,10 +7,23 @@ This repo mocks a sample SCE clinical trial using Domino Flows. The example flow
 3. Uses the ADAM datasets to generate a collection of TFL report as the `outputs`.
 N.B. This does not contain real ADaM and TFL programs. They are dummy programs. 
 
+## Environment Requirements
+
+The project requires two environments:
+
+1. The `Domino Standard Environment` which contains the necessary packages to trigger the flow.
+2. A SAS-enabled environment for running the SAS jobs that get triggered by the flow. This must be created manually before running the flow in this template. Follow the instructions [here](https://docs.dominodatalab.com/en/latest/user_guide/e7805a/sas-on-domino/#_sas_analytics_for_containers_on_domino) for how to create a SAS environment. To have the template work out-of-the-box, the environment must be named `SAS Analytics Pro`. Otherwise, replace the `sas_environment_name` in variable in the `workflow.py` files before running the flow.
+
+## Hardware Requirements
+
+This project works with the default `small-k8s` hardware tier named `Small` that comes with all Domino deployments. To use a different hardware tier, rename the `hardware_tier_name` variable in the `workflow.py` file.
+
+## Running The Flow
+
 To run the flow:
 
 1. Startup a VS Code workspace using the Domino Standard Environment.
-2. Open the terminal and cd into /mnt/code in your directory. 
+2. Open the terminal and cd into `/mnt/code` in your directory. 
 3. Execute the command below through a terminal in your workspace.
 
 ```
@@ -43,21 +56,21 @@ This method provides a standardized interface for triggering a SAS script that p
 
 Here is a sample code snippet of how the method can be used:
 
-```
+```python
 # Create task that generates ADSL dataset. This will run a unique Domino job and return its outputs.
 adsl = create_adam_data(
     name="ADSL", 
     command="sas -stdio prod/adsl.sas",
-    environment="SAS Analytics Pro",
-    hardware_tier= "Small", 
+    environment=sas_environment_name,
+    hardware_tier=hardware_tier_name, 
     sdtm_data_path=sdtm_data_path 
 )
 # Create task that generates ADAE dataset. This takes the output from the previous task as an input.
 adae = create_adam_data(
     name="ADAE", 
     command="sas -stdio prod/adae.sas",
-    environment="SAS Analytics Pro", 
-    hardware_tier= "Small",
+    environment=sas_environment_name, 
+    hardware_tier=hardware_tier_name,
     sdtm_data_path=sdtm_data_path, 
     dependencies=[adsl] # Note how this is the output from the previous task
 )
@@ -83,11 +96,12 @@ This method provides a standardized interface for triggering a SAS script that t
 
 Here is a sample code snippet of how the method can be used:
 
-```
+```python
 t_ae_rel = create_tfl_report(
     name="T_AE_REL", 
     command="sas -stdio prod/t_ae_rel.sas", 
-    hardware_tier="small-k8s",
+    environment=sas_environment_name,
+    hardware_tier=hardware_tier_name,
     dependencies=[adae]
 )
 ```
@@ -95,6 +109,7 @@ Explaining the parameters in more detail:
 
 - `name`: A name for the task
 - `command`: The command that will be use when triggering the Domino job. This should point to the SAS file you want to execute.
+- `environment`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
 - `hardware_tier`: The name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
 - `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
 
@@ -103,18 +118,7 @@ Within the SAS script that gets executed by this method:
 - You can get the `adam_dataset` dependencies by loading the contents of the file located at `/workflow/inputs/<NAME OF DATASET>`
 - The output report must be written to `workflow/outputs/report` in order for it to be returned and tracked properly.
 
-# Environment Requirements
-
-The project requires two environments:
-
-1. The `Domino Standard Environment` which contains the necessary packages to trigger the flow.
-2. A `SAS Analytics Pro` environment which is used by each individual Flow task. 
-
-# Hardware Requirements
-
-This project works with a standard small-sized hardware tier, such as the small-k8s tier on all Domino deployments.
-
-# License
+## License
 This template is licensed under Apache 2.0 and contains the following open source components: 
 
 * Flytekit [Apache 2.0](https://github.com/flyteorg/flytekit/blob/master/LICENSE)
