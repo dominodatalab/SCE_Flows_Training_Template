@@ -96,7 +96,7 @@ This method provides a standardized interface for triggering a SAS script that t
 
 Here is a sample code snippet of how the method can be used:
 
-```
+```python
 t_ae_rel = create_tfl_report(
     name="T_AE_REL", 
     command="sas -stdio prod/t_ae_rel.sas", 
