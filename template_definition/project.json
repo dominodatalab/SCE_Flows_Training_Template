@@ -9,7 +9,7 @@
       "Flows"
     ],
     "mainRepository": {
-      "uri": "https://github.com/dominodatalab/domino-sce-flows",
+      "uri": "https://github.com/dominodatalab/SCE_Flows_Training_Template",
       "ref": {
         "type": "commitId",
         "value": "4993708a9f74e98878491f9adff9cb81418c8979"
@@ -23,11 +23,11 @@
     "created":"2024-05-20T08:22:52.00Z",
     "license": {
       "name": "Apache 2.0",
-      "link": "https://github.com/dominodatalab/domino-sce-flows?tab=Apache-2.0-1-ov-file"
+      "link": "https://github.com/dominodatalab/SCE_Flows_Training_Template?tab=Apache-2.0-1-ov-file"
     },
     "data": {
       "name": "This template uses mock SDTM data which are included with the repository.",
-      "link": "https://github.com/dominodatalab/domino-sce-flows/tree/main/data"
+      "link": "https://github.com/dominodatalab/SCE_Flows_Training_Template/tree/main/data"
     },
     "dataFormat": "SAS7BDAT",
     "recommended": false,
