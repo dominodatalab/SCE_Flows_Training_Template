@@ -12,7 +12,7 @@
       "uri": "https://github.com/dominodatalab/SCE_Flows_Training_Template",
       "ref": {
         "type": "commitId",
-        "value": "4993708a9f74e98878491f9adff9cb81418c8979"
+        "value": "5cb06402727deb8347ab1fa20bd0f9b4bb4f70f2"
       },
       "serviceProvider": "github"
     },
@@ -20,7 +20,7 @@
       "name": "Domino",
       "link": "https://domino.ai"
     },
-    "created":"2024-05-20T08:22:52.00Z",
+    "created":"2024-07-16T08:22:52.00Z",
     "license": {
       "name": "Apache 2.0",
       "link": "https://github.com/dominodatalab/SCE_Flows_Training_Template?tab=Apache-2.0-1-ov-file"
