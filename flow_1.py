@@ -47,4 +47,17 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True
     )
+
+     # Create task that generates ADAE dataset. 
+    advs_task = run_domino_job_task(
+        flyte_task_name="Create ADVS Dataset",
+        command="prod/adam/advs.sas",
+        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
+        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"]),
+        Input(name="adae_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae_dataset"])],
+        output_specs=[Output(name="advs_dataset", type=DataArtifact.File(name="advs.sas7bdat"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True
+    )
     return
