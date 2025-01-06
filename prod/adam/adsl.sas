@@ -12,13 +12,13 @@ libname outputs "/workflow/outputs"; /* All outputs must go to this directory at
 
 /* Read in the SDTM data path input */
 data _null__;
-    infile '/workflow/inputs/sdtm_data_path' truncover;
+    infile '/workflow/inputs/sdtm_snapshot_task_input' truncover;
     input data_path $CHAR100.;
     call symputx('data_path', data_path, 'G');
 run;
 libname dataset "&data_path.";
 
 /* Write the final ADAM output */
-data outputs.adam;
+data outputs.adsl_dataset;
     set dataset.tv;
 run;
