@@ -15,7 +15,7 @@ x "mv /workflow/inputs/adae_dataset /workflow/inputs/adae_dataset.sas7bdat";
 
 /* Read in the SDTM data path input */
 data _null__;
-    infile '/workflow/inputs/sdtm_data_path' truncover;
+    infile '/workflow/inputs/sdtm_snapshot_task_input' truncover;
     input data_path $CHAR100.;
     call symputx('data_path', data_path, 'G');
 run;
