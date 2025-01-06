@@ -48,7 +48,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         use_project_defaults_for_omitted=True
     )
 
-     # Create task that generates ADAE dataset. 
+     # Create task that generates ADVS dataset. 
     advs_task = run_domino_job_task(
         flyte_task_name="Create ADVS Dataset",
         command="prod/adam/advs.sas",
@@ -56,6 +56,18 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"]),
         Input(name="adae_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae_dataset"])],
         output_specs=[Output(name="advs_dataset", type=DataArtifact.File(name="advs.sas7bdat"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True
+    )
+
+    # Create task that generates the AE report. 
+    t_ae_rel_task = run_domino_job_task(
+        flyte_task_name="Create T_AE_REL Report",
+        command="prod/tfl/t_ae_rel.sas",
+        inputs=[Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"]),
+        Input(name="adae_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae_dataset"])],
+        output_specs=[Output(name="t_ae_rel", type=ReportArtifact.File(name="t_ae_rel.pdf"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True
