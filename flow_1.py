@@ -72,4 +72,15 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True
     )
+
+    # Create task that generates the VSCAT report. 
+    t_vscat_task = run_domino_job_task(
+        flyte_task_name="Create T_VSCAT Report",
+        command="prod/tfl/t_vscat.sas",
+        inputs=[Input(name="advs_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=advs_task["advs_dataset"])],
+        output_specs=[Output(name="t_vscat", type=ReportArtifact.File(name="t_vscat.pdf"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True
+    )
     return
