@@ -12,7 +12,7 @@ from flytekitplugins.domino.artifact import Artifact, DATA, MODEL, REPORT
 
     To the run the workflow remotely, execute the following code in your terminal:
     
-    pyflyte run --remote workflow.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
+    pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
     """
 
 # Define variables for the hardware tier and compute enviroment
@@ -26,21 +26,25 @@ ReportArtifact = Artifact("TFL Reports", REPORT)
 @workflow
 def ADaM_TFL(sdtm_dataset_snapshot: str):
     # Create task that generates ADSL dataset. This will run a unique Domino job and return its outputs.
-    adsl = create_adam_data(
-        name="ADSL", 
-        command="prod/adsl.sas",
-        environment=sas_environment_name,
-        hardware_tier= hardware_tier_name, # Optional parameter. If not set, then the default for the project will be used.
-        sdtm_data_path=sdtm_data_path # Note this this is simply the input value taken in from the command line argument
-    )
-
-     adsl_task = run_domino_job_task(
+    adsl_task = run_domino_job_task(
         flyte_task_name="Create ADSL Dataset",
         command="prod/adam/adsl.sas",
         inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot)],
         output_specs=[Output(name="adsl_dataset", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
-        hardware_tier=hardware_tier_name,
+        hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True
-    ) 
+    )
+
+     # Create task that generates ADAE dataset. 
+    adae_task = run_domino_job_task(
+        flyte_task_name="Create ADAE Dataset",
+        command="prod/adam/adae.sas",
+        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
+        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"])],
+        output_specs=[Output(name="adae_dataset", type=DataArtifact.File(name="adae.sas7bdat"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True
+    )
     return

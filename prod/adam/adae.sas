@@ -14,15 +14,15 @@ x "mv /workflow/inputs/adsl_sas7bdat /workflow/inputs/adsl.sas7bdat";
 
 /* Read in the SDTM data path input */
 data _null__;
-    infile '/workflow/inputs/sdtm_data_path' truncover;
+    infile '/workflow/inputs/sdtm_snapshot_task_input' truncover;
     input data_path $CHAR100.;
     call symputx('data_path', data_path, 'G');
 run;
 libname dataset "&data_path.";
 
 /* Write the final ADAM output */
-data outputs.adam;
-    merge dataset.ts inputs.adsl;
+data outputs.adae_dataset;
+    merge dataset.ts inputs.adsl_dataset;
 run;
 
 
