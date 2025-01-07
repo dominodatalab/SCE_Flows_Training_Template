@@ -44,77 +44,57 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 The flow definition is located in the file named `flow_1.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the Git repo. In reality, this would likely exist in a Domino Dataset snapshot which your parameter would point to instead.
 
-Within the flow definition we use the DominoJobTask helper method to define each Flow task. This method will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
+Within the flow definition we use the `run_domino_job_task` helper method to define both the Domino Job and the Flow task together in one. This method will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
-See the [Domino Docs]([https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#_use_helper_methods]) on all the parameters that can befiend the task helper method. 
+See the [[Domino Docs]](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#use-base-classes) view the base class methods of `DominoJobConfig` and `DominoJobTask`.
 
-**create_adam_data()**
+**run_domino_job_task()**
 
-This method provides a standardized interface for triggering a SAS script that produces an ADAM dataset. 
+This method provides a standardized interface for both configuring the Flow task and the Job it will run. 
 
 Here is a sample code snippet of how the method can be used:
 
 ```python
 # Create task that generates ADSL dataset. This will run a unique Domino job and return its outputs.
-adsl = create_adam_data(
-    name="ADSL", 
-    command="sas -stdio prod/adsl.sas",
-    environment=sas_environment_name,
-    hardware_tier=hardware_tier_name, 
-    sdtm_data_path=sdtm_data_path 
-)
-# Create task that generates ADAE dataset. This takes the output from the previous task as an input.
-adae = create_adam_data(
-    name="ADAE", 
-    command="sas -stdio prod/adae.sas",
-    environment=sas_environment_name, 
-    hardware_tier=hardware_tier_name,
-    sdtm_data_path=sdtm_data_path, 
-    dependencies=[adsl] # Note how this is the output from the previous task
-)
+    adsl_task = run_domino_job_task(
+        flyte_task_name="Create ADSL Dataset",
+        command="prod/adam/adsl.sas",
+        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot)],
+        output_specs=[Output(name="adsl_dataset", type=DataArtifact.File(name="adsl.sas7bdat"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
+    )
+
+     # Create task that generates ADAE dataset. 
+    adae_task = run_domino_job_task(
+        flyte_task_name="Create ADAE Dataset",
+        command="prod/adam/adae.sas",
+        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
+        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"])],
+        output_specs=[Output(name="adae_dataset", type=DataArtifact.File(name="adae.sas7bdat"))],
+        environment_name=sas_environment_name,
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
+    )
 ```
 Explaining the parameters in more detail:
 
-- `name`: Name for the dataset that will be produced.
-- `command`: Command that will be used when triggering the Domino job. This should point to the SAS file you want to execute.
-- `environment`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
-- `hardware_tier`: Name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
-- `sdtm_data_path`: Filepath location of the SDTM data. This parameter will be taken into the task as an input, which can be parsed and used as a parameter within the SAS script during the Domino job.
-- `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
+- `flyte_task_name`: Name of both the Flow Task and the corresponding Domino Job.
+- `command`: Command that will be used when triggering the Domino job. This point to the underlying program you want to execute.
+- `inputs`: The strongly typed inputs that the underlying program ingests. This can be combination of external Launch Parameters such as Domino Datasets and outputs from other Flow tasks. 
+- `output_specs`: The strongly typed outputs produced by my underlying task program. In this example we are giving the outputs the type DataArtifact in order to group them as Flow Artifacts.
+- `environment_name`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
+- `hardware_tier_name`: Name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
+- `use_project_defaults_for_omitted`: Setting this to true means that any Job config that has not been explictly defined as a parameter will use the project default.
+- `cache`: Setting this to true enables caching for this task.
+- `cache_version`: A user defined value that specifies a version identifier for a task's cached results. It ensures that cached results are reused only if the task's logic and version remain consistent. Changing this allows users to force a rerun of the task. 
 
-Within the SAS script that gets executed by this method:
 
-- You can get the `sdtm_data_path` variable by reading the contents of the file located at `/workflow/inputs/sdtm_data_path`
-- You can get the `adam_dataset` dependencies by loading the contents of the file located at `/workflow/inputs/<NAME OF DATASET>`
-- The output ADAM dataset must be written to `workflow/outputs/adam` in order for it to be returned, tracked properly, and passed into another task.
-
-**create_tfl_report**
-
-This method provides a standardized interface for triggering a SAS script that to produces aa TFL report. 
-
-Here is a sample code snippet of how the method can be used:
-
-```python
-t_ae_rel = create_tfl_report(
-    name="T_AE_REL", 
-    command="sas -stdio prod/t_ae_rel.sas", 
-    environment=sas_environment_name,
-    hardware_tier=hardware_tier_name,
-    dependencies=[adae]
-)
-```
-Explaining the parameters in more detail:
-
-- `name`: A name for the task
-- `command`: The command that will be use when triggering the Domino job. This should point to the SAS file you want to execute.
-- `environment`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
-- `hardware_tier`: The name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
-- `dependencies`: List of outputs from other create_adam_data() tasks. This task will not begin until the specified dependencies are produced. These are passed to the Domino job as inputs, which can be used within the SAS scripts.
-
-Within the SAS script that gets executed by this method:
-
-- You can get the `adam_dataset` dependencies by loading the contents of the file located at `/workflow/inputs/<NAME OF DATASET>`
-- The output report must be written to `workflow/outputs/report` in order for it to be returned and tracked properly.
 
 ## License
 This template is licensed under Apache 2.0 and contains the following open source components: 
