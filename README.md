@@ -46,7 +46,7 @@ The flow definition is located in the file named `flow_1.py` under a method call
 
 Within the flow definition we use the DominoJobTask helper method to define each Flow task. This method will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
-See the [Domino Docs]([https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#_use_helper_methods) on all the parameters that can befiend the task helper method. 
+See the [Domino Docs]([https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#_use_helper_methods]) on all the parameters that can befiend the task helper method. 
 
 **create_adam_data()**
 
