@@ -7,7 +7,7 @@ options dlcreatedir;
 libname inputs "/workflow/inputs"; /* All inputs live in this directory at workflow/inputs/<NAME OF INPUT> */ 
 libname outputs "/workflow/outputs"; /* All outputs must go to this directory at workflow/inputs/<NAME OF OUTPUT>y */ 
 
-/* TODO: Read the inputs and write the outputs properly. For now, we will just creating a dummy file */
+/* TODO2: Read the inputs and write the outputs properly. For now, we will just creating a dummy file */
 ods pdf file='/workflow/outputs/t_ae_rel' pdftoc=2;
 title 'T_AE_REL report';
 title2 '(this space left blank)';

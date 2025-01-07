@@ -33,7 +33,9 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         output_specs=[Output(name="adsl_dataset", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
     )
 
      # Create task that generates ADAE dataset. 
@@ -45,7 +47,9 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         output_specs=[Output(name="adae_dataset", type=DataArtifact.File(name="adae.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
     )
 
      # Create task that generates ADVS dataset. 
@@ -58,7 +62,9 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         output_specs=[Output(name="advs_dataset", type=DataArtifact.File(name="advs.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
     )
 
     # Create task that generates the AE report. 
@@ -70,9 +76,10 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         output_specs=[Output(name="t_ae_rel", type=ReportArtifact.File(name="t_ae_rel.pdf"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
     )
-
     # Create task that generates the VSCAT report. 
     t_vscat_task = run_domino_job_task(
         flyte_task_name="Create T_VSCAT Report",
@@ -81,6 +88,8 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         output_specs=[Output(name="t_vscat", type=ReportArtifact.File(name="t_vscat.pdf"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True
+        use_project_defaults_for_omitted=True,
+        cache=True,
+        cache_version="1.0"
     )
     return
