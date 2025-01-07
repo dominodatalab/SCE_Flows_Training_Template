@@ -78,7 +78,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
         cache=True,
-        cache_version="1.0"
+        cache_version="3.0"
     )
     # Create task that generates the VSCAT report. 
     t_vscat_task = run_domino_job_task(
