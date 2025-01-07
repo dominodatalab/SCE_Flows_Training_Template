@@ -2,7 +2,7 @@
 
 This repo mocks a sample SCE clinical trial using Domino Flows. The example flow:
 
-1. Takes your raw SDTM data as an `Launch Parameter`.
+1. Takes your SDTM data as an `Launch Parameter`.
 2. Produces a series of ADAM datasets that are collected together as Flow Artifact with type `DATA`.
 3. Uses the ADAM datasets to generate a 2 TFL report that are collected together as Flow Artifact with type `REPORT`.
 N.B. This does not contain real ADaM and TFL programs. They are dummy programs. 
