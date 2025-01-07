@@ -2,9 +2,9 @@
 
 This repo mocks a sample SCE clinical trial using Domino Flows. The example flow:
 
-1. Takes your raw SDTM data as an `input`.
-2. Produces a series of ADAM datasets.
-3. Uses the ADAM datasets to generate a collection of TFL report as the `outputs`.
+1. Takes your raw SDTM data as an `Launch Parameter`.
+2. Produces a series of ADAM datasets that are collected together as Flow Artifact with type `DATA`.
+3. Uses the ADAM datasets to generate a 2 TFL report that are collected together as Flow Artifact with type `REPORT`.
 N.B. This does not contain real ADaM and TFL programs. They are dummy programs. 
 
 ## Environment Requirements
@@ -12,11 +12,11 @@ N.B. This does not contain real ADaM and TFL programs. They are dummy programs.
 The project requires two environments:
 
 1. The `Domino Standard Environment` which contains the necessary packages to trigger the flow.
-2. A SAS-enabled environment for running the SAS jobs that get triggered by the flow. This must be created manually before running the flow in this template. Follow the instructions [here](https://docs.dominodatalab.com/en/latest/user_guide/e7805a/sas-on-domino/#_sas_analytics_for_containers_on_domino) for how to create a SAS environment. To have the template work out-of-the-box, the environment must be named `SAS Analytics Pro`. Otherwise, replace the `sas_environment_name` in variable in the `workflow.py` files before running the flow.
+2. A SAS-enabled environment for running the SAS jobs that get triggered by the flow. This must be created manually before running the flow in this template. Follow the instructions [here](https://docs.dominodatalab.com/en/latest/user_guide/e7805a/sas-on-domino/#_sas_analytics_for_containers_on_domino) for how to create a SAS environment. To have the template work out-of-the-box, the environment must be named `SAS Analytics Pro`. Otherwise, replace the `sas_environment_name` in variable in the `flow_1.py` files before running the flow.
 
 ## Hardware Requirements
 
-This project works with the default `small-k8s` hardware tier named `Small` that comes with all Domino deployments. To use a different hardware tier, rename the `hardware_tier_name` variable in the `workflow.py` file.
+This project works with the default `small-k8s` hardware tier named `Small` that comes with all Domino deployments. To use a different hardware tier, rename the `hardware_tier_name` variable in the `flow_1.py` file.
 
 ## Running The Flow
 
@@ -27,20 +27,18 @@ To run the flow:
 3. Execute the command below through a terminal in your workspace.
 
 ```
-pyflyte run --remote workflow.py ADaM_TFL --sdtm_data_path /mnt/code/data/sdtm-blind
+pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
 ```
 - The `pyflyte run` command will register the flow and trigger an execution.
 - The `--remote` option enables running the execution remotely (outside of the workspace and in Flows). 
-- `workflow.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
-- The `--sdtm_data_path` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path.
+- `flow_1.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
+- The `--sdtm_dataset_snapshot` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path. N.B. In this example the SDTM datasets are stored in the Git repo. In reality, this would likely be stored in a Domino Dataset.
 
-Once you run the command, a direct link to the Flyte console should be returned:
-
-![Execution Link](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/execution-link.png?raw=true)
+Once you run the command, a link to the running Flow in the Project UI will be returned in the terminal.
 
 Upon clicking on the link, you should be navigated to a page where you can monitor the execution:
 
-![Monitor](https://github.com/dominodatalab/domino-sce-flows/blob/b45fde19fe69246d2d54985ef4f5c6c6772eed07/screenshots/monitor.png?raw=true)
+![Monitor](https://github.com/dominodatalab/SCE_Flows_Training_Template/blob/13d705d8326c0e789f152580bfed8cdd846bdbc4/screenshots/monitor.jpg?raw=true)
 
 ## Flow Breakdown
 
