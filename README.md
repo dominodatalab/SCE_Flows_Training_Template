@@ -32,7 +32,7 @@ pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/s
 - The `pyflyte run` command will register the flow and trigger an execution.
 - The `--remote` option enables running the execution remotely (outside of the workspace and in Flows). 
 - `flow_1.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
-- The `--sdtm_dataset_snapshot` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path. N.B. In this example the SDTM datasets are stored in the Git repo. In reality, this would likely be stored in a Domino Dataset.
+- The `--sdtm_dataset_snapshot` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path. 
 
 Once you run the command, a link to the running Flow in the Project UI will be returned in the terminal.
 
@@ -42,11 +42,11 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 ## Flow Breakdown
 
-The flow definition is located in the file named `workflow.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the Git repo. In reality, this would likely exist in a Domino Dataset snapshot which your parameter would point to instead.
+The flow definition is located in the file named `flow_1.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the Git repo. In reality, this would likely exist in a Domino Dataset snapshot which your parameter would point to instead.
 
-Within the flow definition, there are two helper methods that are used for defining common tasks that are used in clinical trial studies. These methods will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
+Within the flow definition we use the DominoJobTask helper method to define each Flow task. This method will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
-To see how you would construct a standard Flow task i.e. without the ADaM or TFL helper methods, see the [Domino Docs](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/). 
+See the [Domino Docs]([https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#_use_helper_methods) on all the parameters that can befiend the task helper method. 
 
 **create_adam_data()**
 
