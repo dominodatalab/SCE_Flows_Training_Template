@@ -95,7 +95,7 @@ Explaining the parameters in more detail:
 - `cache`: Setting this to true enables caching for this task.
 - `cache_version`: A user defined value that specifies a version identifier for a task's cached results. It ensures that cached results are reused only if the task's logic and version remain consistent. Changing this allows users to force a rerun of the task. 
 
-
+See the [Domino Docs](https://docs.dominodatalab.com/en/latest/user_guide/e09156/define-flows/#_use_helper_methods) view the full list of configurable parameters for this method.
 
 ## License
 This template is licensed under Apache 2.0 and contains the following open source components: 
