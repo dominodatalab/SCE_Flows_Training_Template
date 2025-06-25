@@ -13,11 +13,13 @@ from flytekitplugins.domino.artifact import Artifact, DATA, MODEL, REPORT
     To the run the workflow remotely, execute the following code in your terminal:
     
     pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
+
     """
 
 # Define variables for the hardware tier and compute enviroment
 sas_environment_name = "SAS Analytics Pro"
 hardware_tier_name = "Small"
+cache = False
 
 # Define Flow Artifacts for your ADaM Datasets and TFL Reports to gather in
 DataArtifact = Artifact("ADaM Datasets", DATA)
@@ -34,7 +36,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
-        cache=True,
+        cache=cache,
         cache_version="1.0"
     )
 
@@ -48,7 +50,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
-        cache=True,
+        cache=cache,
         cache_version="1.0"
     )
 
@@ -63,7 +65,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
-        cache=True,
+        cache=cache,
         cache_version="1.0"
     )
 
@@ -77,8 +79,8 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
-        cache=True,
-        cache_version="3.0"
+        cache=cache,
+        cache_version="1.0"
     )
     # Create task that generates the VSCAT report. 
     t_vscat_task = run_domino_job_task(
@@ -89,7 +91,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
-        cache=True,
+        cache=cache,
         cache_version="1.0"
     )
     return
