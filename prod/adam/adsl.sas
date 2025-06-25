@@ -11,12 +11,14 @@ libname inputs "/workflow/inputs"; /* All inputs live in this directory at workf
 libname outputs "/workflow/outputs"; /* All outputs must go to this directory at workflow/inputs/<NAME OF OUTPUT>y */ 
 
 /* Read in the SDTM data path input */
-data _null__;
-    infile '/workflow/inputs/sdtm_snapshot_task_input' truncover;
-    input data_path $CHAR100.;
-    call symputx('data_path', data_path, 'G');
+data _null__;   
+    infile '/workflow/inputs/sdtm_snapshot_task_input' truncover;  /* Open the file that Flyte creates from the Launch Parameter value. 
+                                                                      This file contains a single string that is the path to the input dataset */
+    input data_path $CHAR100.;  /* Read the string from that file into a SAS variable called data_path.*/
+    call symputx('data_path', data_path, 'G');  /* Take that value and store it in a global macro variable called &data_path */
 run;
-libname dataset "&data_path.";
+
+libname dataset "&data_path."; /* Assign a lib to this path */
 
 /* Write the final ADAM output */
 data outputs.adsl_dataset;
