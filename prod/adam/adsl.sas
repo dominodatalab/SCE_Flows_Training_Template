@@ -21,6 +21,6 @@ run;
 libname dataset "&data_path."; /* Assign a lib to this path */
 
 /* Write the final ADAM output */
-data outputs.adsl_dataset;
+data outputs.adsl;
     set dataset.tv;
 run;
