@@ -12,18 +12,29 @@ from flytekitplugins.domino.artifact import Artifact, DATA, MODEL, REPORT, Expor
 
     To the run the workflow remotely, execute the following code in your terminal:
     
-    pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
+    pyflyte run --remote flow_1_prod.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
 
     """
 
-# Define variables for the hardware tier and compute enviroment
-sas_environment_name = "SAS Analytics Pro"
-hardware_tier_name = "Small"
+# As this is considered a PROD Flow definition, we do not the use_project_defaults_for_omitted parameter
+# and explictly set every required parameter in the task defintion to ensure reproducability.
+# These are all the parameters required to be explicitly set of each task. 
+
+sas_environment_name = "SAS Analytics Pro"                    # Change to the name of your deployments SAS Environment name
+environment_revision_id="68792679a33fd917266afcbf"            # Change to the latest revision ID of your deployments SAS Environment
+hardware_tier_name = "Small"                                  # Change to the name of one of your Domino's hardware tiers
+GitRef_type="commitId"                                     
+GitRef_value="ae2b61b09125271b5478c53fe06e96c278547769"       # Change to the commitId of main Git repository 
+volume_size_gib=10
+dfs_repo_commit_id="93326b183a6dd5ec24035b570337c08108658617"  # Change to the latest commit ID of the Artifacts file system in your project
 cache = False
 
 # Define Flow Artifacts for your ADaM Datasets and TFL Reports to gather in
 DataArtifact = Artifact("ADaM Datasets", DATA)
 ReportArtifact = Artifact("TFL Reports", DATA)
+
+# Add the ID of the Dataset you want to export your ADaM Datasets to 
+dataset_id="685a8797c7e1254245082ff7"
 
 @workflow
 def ADaM_TFL(sdtm_dataset_snapshot: str):
@@ -34,8 +45,13 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot)],
         output_specs=[Output(name="adsl", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
+        environment_revision_id=environment_revision_id,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
+        dataset_snapshots=[],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
+        volume_size_gib=volume_size_gib,
+        dfs_repo_commit_id=dfs_repo_commit_id,
+        external_data_volumes=[],
         cache=cache,
         cache_version="1.0"
     )
@@ -48,8 +64,13 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         Input(name="adsl", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl"])],
         output_specs=[Output(name="adae", type=DataArtifact.File(name="adae.sas7bdat"))],
         environment_name=sas_environment_name,
+        environment_revision_id=environment_revision_id,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
+        dataset_snapshots=[],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
+        volume_size_gib=volume_size_gib,
+        dfs_repo_commit_id=dfs_repo_commit_id,
+        external_data_volumes=[],
         cache=cache,
         cache_version="1.0"
     )
@@ -63,8 +84,13 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         Input(name="adae", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae"])],
         output_specs=[Output(name="advs", type=DataArtifact.File(name="advs.sas7bdat"))],
         environment_name=sas_environment_name,
+        environment_revision_id=environment_revision_id,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
+        dataset_snapshots=[],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
+        volume_size_gib=volume_size_gib,
+        dfs_repo_commit_id=dfs_repo_commit_id,
+        external_data_volumes=[],
         cache=cache,
         cache_version="1.0"
     )
@@ -77,8 +103,13 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         Input(name="adae", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae"])],
         output_specs=[Output(name="t_ae_rel", type=ReportArtifact.File(name="t_ae_rel.pdf"))],
         environment_name=sas_environment_name,
+        environment_revision_id=environment_revision_id,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
+        dataset_snapshots=[],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
+        volume_size_gib=volume_size_gib,
+        dfs_repo_commit_id=dfs_repo_commit_id,
+        external_data_volumes=[],
         cache=cache,
         cache_version="1.0"
     )
@@ -89,9 +120,27 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         inputs=[Input(name="advs", type=FlyteFile[TypeVar("sas7bdat")], value=advs_task["advs"])],
         output_specs=[Output(name="t_vscat", type=ReportArtifact.File(name="t_vscat.pdf"))],
         environment_name=sas_environment_name,
+        environment_revision_id=environment_revision_id,
         hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
+        dataset_snapshots=[],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
+        volume_size_gib=volume_size_gib,
+        dfs_repo_commit_id=dfs_repo_commit_id,
+        external_data_volumes=[],
         cache=cache,
         cache_version="1.0"
     )
+
+    run_launch_export_artifacts_task(
+        spec_list=[
+            ExportArtifactToDatasetsSpec(
+                artifact=DataArtifact,
+                dataset_id=dataset_id,
+            ),
+        ],
+        environment_name="6.1 Domino Standard Environment Py3.10 R4.5",
+        hardware_tier_name=hardware_tier_name,
+        use_project_defaults_for_omitted=True
+    )
+    
     return
