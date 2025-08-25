@@ -10,8 +10,8 @@ libname inputs "/workflow/inputs"; /* All inputs live in this directory at workf
 libname outputs "/workflow/outputs"; /* All outputs must go to this directory at workflow/inputs/<NAME OF OUTPUT>y */ 
 
 /* Mandatory steps to add sas7bdat file extension to inputs */
-x "mv /workflow/inputs/adsl_dataset /workflow/inputs/adsl_dataset.sas7bdat";
-x "mv /workflow/inputs/adae_dataset /workflow/inputs/adae_dataset.sas7bdat";
+x "mv /workflow/inputs/adsl /workflow/inputs/adsl.sas7bdat";
+x "mv /workflow/inputs/adae /workflow/inputs/adae.sas7bdat";
 
 /* Read in the SDTM data path input */
 data _null__;
@@ -22,7 +22,7 @@ run;
 libname dataset "&data_path.";
 
 /* Write the final ADAM output */
-data outputs.advs_dataset;
-    merge dataset.ta inputs.adsl_dataset inputs.adae_dataset;
+data outputs.advs;
+    merge dataset.ta inputs.adsl inputs.adae;
 run;
 
