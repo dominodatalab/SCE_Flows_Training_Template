@@ -23,7 +23,7 @@ cache = False
 
 # Define Flow Artifacts for your ADaM Datasets and TFL Reports to gather in
 DataArtifact = Artifact("ADaM Datasets", DATA)
-ReportArtifact = Artifact("TFL Reports", REPORT)
+ReportArtifact = Artifact("TFL Reports", DATA)
 
 @workflow
 def ADaM_TFL(sdtm_dataset_snapshot: str):
@@ -32,7 +32,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         flyte_task_name="Create ADSL Dataset",
         command="prod/adam/adsl.sas",
         inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot)],
-        output_specs=[Output(name="adsl_dataset", type=DataArtifact.File(name="adsl.sas7bdat"))],
+        output_specs=[Output(name="adsl", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
@@ -45,8 +45,8 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         flyte_task_name="Create ADAE Dataset",
         command="prod/adam/adae.sas",
         inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
-        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"])],
-        output_specs=[Output(name="adae_dataset", type=DataArtifact.File(name="adae.sas7bdat"))],
+        Input(name="adsl", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl"])],
+        output_specs=[Output(name="adae", type=DataArtifact.File(name="adae.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
@@ -59,9 +59,9 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
         flyte_task_name="Create ADVS Dataset",
         command="prod/adam/advs.sas",
         inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
-        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"]),
-        Input(name="adae_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae_dataset"])],
-        output_specs=[Output(name="advs_dataset", type=DataArtifact.File(name="advs.sas7bdat"))],
+        Input(name="adsl", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl"]),
+        Input(name="adae", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae"])],
+        output_specs=[Output(name="advs", type=DataArtifact.File(name="advs.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True,
@@ -73,8 +73,8 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
     t_ae_rel_task = run_domino_job_task(
         flyte_task_name="Create T_AE_REL Report",
         command="prod/tfl/t_ae_rel.sas",
-        inputs=[Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"]),
-        Input(name="adae_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae_dataset"])],
+        inputs=[Input(name="adsl", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl"]),
+        Input(name="adae", type=FlyteFile[TypeVar("sas7bdat")], value=adae_task["adae"])],
         output_specs=[Output(name="t_ae_rel", type=ReportArtifact.File(name="t_ae_rel.pdf"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
@@ -86,7 +86,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
     t_vscat_task = run_domino_job_task(
         flyte_task_name="Create T_VSCAT Report",
         command="prod/tfl/t_vscat.sas",
-        inputs=[Input(name="advs_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=advs_task["advs_dataset"])],
+        inputs=[Input(name="advs", type=FlyteFile[TypeVar("sas7bdat")], value=advs_task["advs"])],
         output_specs=[Output(name="t_vscat", type=ReportArtifact.File(name="t_vscat.pdf"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
