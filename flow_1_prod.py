@@ -138,7 +138,7 @@ def ADaM_TFL(sdtm_dataset_snapshot: str):
                 dataset_id=dataset_id,
             ),
         ],
-        environment_name="Domino Standard Environment Py3.10 R4.5",
+        environment_name="Domino Standard Environment Py3.10 R4.5 - Latest Cloud",
         hardware_tier_name=hardware_tier_name,
         use_project_defaults_for_omitted=True
     )
