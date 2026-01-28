@@ -18,17 +18,16 @@ from flytekitplugins.domino.artifact import Artifact, DATA, MODEL, REPORT, Expor
 # Define common Job config parameters across your seperate Flow tasks
 
 sas_environment_name = "SAS Analytics Pro"                    # Change to the name of your deployments SAS Environment name
-environment_revision_id="68792679a33fd917266afcbf"            # Change to the latest revision ID of your deployments SAS Environment
+environment_revision_id="690a9ac36416b01c67c07e75"            # Change to the latest revision ID of your deployments SAS Environment
 hardware_tier_name = "Small"                                  # Change to the name of one of your Domino's hardware tiers
 GitRef_type="commitId"                                     
-GitRef_value="ae2b61b09125271b5478c53fe06e96c278547769"       # Change to the commitId of main Git repository 
-netapp_volume_id="43d47cd8-af02-4d8e-8d0b-ab046102c03b"
-volume_size_gib=10
+GitRef_value="4d76513dc0623e3898f191253967715414d00cf0"       # Change to the commitId of main Git repository 
+netapp_volume_id="43d47cd8-af02-4d8e-8d0b-ab046102c03b"       # Change to the ID of the Netapp Volume containing your SDTM data
 dfs_repo_commit_id="773b62fa7a6f41063056982a1c93646e6b4db727"  # Change to the latest commit ID of the Artifacts file system in your project
 cache = False
 
-# Add the ID of the Dataset you want to export your ADaM Datasets to 
-netapp_volume_export_id="685a8797c7e1254245082ff7"
+# Add the ID of the NetApp Volume you want to export your ADaM Datasets to 
+netapp_volume_export_id="c76a99a0-7659-4164-869a-ab397ac10cc6"
 
 # Define Flow Artifacts for your ADaM Datasets and TFL Reports to gather in
 DataArtifact = Artifact("ADaM Datasets", DATA)
