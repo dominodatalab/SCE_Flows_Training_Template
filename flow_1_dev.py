@@ -21,7 +21,7 @@ hardware_tier_name = "Small"
 GitRef_type="branches"                                     
 GitRef_value="6.2-updates"  
 netapp_volume_id="43d47cd8-af02-4d8e-8d0b-ab046102c03b" # Enter you the ID of the NetApp Volume from your Domino instance containing SDTM data
-cache = True
+cache = False
 
 # Define Flow Artifacts for your ADaM Datasets and TFL Reports to gather in
 DataArtifact = Artifact("ADaM Datasets", DATA)
@@ -37,7 +37,7 @@ def ADaM_TFL(netapp_volume_snapshot: str):
         output_specs=[Output(name="adsl", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id="43d47cd8-af02-4d8e-8d0b-ab046102c03b", Version=1)],
+        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id=netapp_volume_id, Version=1)],
         main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
         use_project_defaults_for_omitted=True,
         cache=cache,
@@ -53,7 +53,7 @@ def ADaM_TFL(netapp_volume_snapshot: str):
         output_specs=[Output(name="adae", type=DataArtifact.File(name="adae.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id="43d47cd8-af02-4d8e-8d0b-ab046102c03b", Version=1)],
+        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id=netapp_volume_id, Version=1)],
         main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
         use_project_defaults_for_omitted=True,
         cache=cache,
@@ -70,7 +70,7 @@ def ADaM_TFL(netapp_volume_snapshot: str):
         output_specs=[Output(name="advs", type=DataArtifact.File(name="advs.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
-        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id="43d47cd8-af02-4d8e-8d0b-ab046102c03b", Version=1)],
+        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id=netapp_volume_id, Version=1)],
         main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
         use_project_defaults_for_omitted=True,
         cache=cache,
