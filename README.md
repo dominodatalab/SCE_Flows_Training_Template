@@ -4,7 +4,7 @@ This repo mocks a sample SCE clinical trial using Domino Flows. The example flow
 
 1. Takes your SDTM data as an `Launch Parameter`.
 2. Produces a series of ADAM datasets that are collected together as Flow Artifact with type `DATA`.
-3. Uses the ADAM datasets to generate a 2 TFL report that are collected together as Flow Artifact with type `REPORT`.
+3. Uses the ADAM datasets to generate a 2 TFL report that are collected together as Flow Artifact with type `DATA`.
 
 N.B. This does not contain real ADaM and TFL programs. They are dummy programs. 
 
@@ -17,23 +17,25 @@ The project requires two environments:
 
 ## Hardware Requirements
 
-This project works with the default `small-k8s` hardware tier named `Small` that comes with all Domino deployments. To use a different hardware tier, rename the `hardware_tier_name` variable in the `flow_1.py` file.
+This project works with the default `small-k8s` hardware tier named `Small` that comes with all Domino deployments. To use a different hardware tier, rename the `hardware_tier_name` variable in the `flow_1_dev.py` file.
 
 ## Running The Flow
 
 To run the flow:
 
-1. Startup a VS Code workspace using the Domino Standard Environment.
-2. Open the terminal and cd into `/mnt/code` in your directory. 
-3. Execute the command below through a terminal in your workspace.
+1. Ensure you have a NetApp Volume attached to your project with the name `CDISC01_SDTMBLIND` and that contains example SDTM data. 
+2. Startup a VS Code workspace using the Domino Standard Environment.
+3. Open the terminal and cd into `/mnt/code` in your directory. 
+4. Execute the command below through a terminal in your workspace.
 
 ```
-pyflyte run --remote flow_1.py ADaM_TFL --sdtm_dataset_snapshot /mnt/code/data/sdtm-blind
+ pyflyte run --remote flow_1_dev.py ADaM_TFL --netapp_volume_snapshot /mnt/netapp-volumes/CDISC01_SDTMBLIND
+
 ```
 - The `pyflyte run` command will register the flow and trigger an execution.
 - The `--remote` option enables running the execution remotely (outside of the workspace and in Flows). 
-- `flow_1.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
-- The `--sdtm_dataset_snapshot` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path. 
+- `flow_1_dev.py` / `ADaM_TFL` specifies the file and method that contains the flow definition.
+- The `--netapp_volume_snapshot` parameter specifies the location of your raw SDTM data. To use use a different dataset as your input, change this parameter to a different folder path. 
 
 Once you run the command, a link to the running Flow in the Project UI will be returned in the terminal.
 
@@ -43,7 +45,7 @@ Upon clicking on the link, you should be navigated to a page where you can monit
 
 ## Flow Breakdown
 
-The flow definition is located in the file named `flow_1.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the Git repo. In reality, this would likely exist in a Domino Dataset snapshot which your parameter would point to instead.
+The flow definition is located in the file named `flow_1_dev.py` under a method called `ADaM_TFL`. Notice how the SDTM dataset path that was specified through the command line gets taken in as parameter to this method. In this example, we have stored the SDTM dataset inside of the NetApp Volume called CDISC01_SDTMBLIND.
 
 Within the flow definition we use the `run_domino_job_task` helper method to define both the Domino Job and the Flow task together in one. This method will ultimately trigger a Domino Job with the specified parameters and return the outputs that get produced by the job.  
 
@@ -60,28 +62,17 @@ Here is a sample code snippet of how the method can be used:
     adsl_task = run_domino_job_task(
         flyte_task_name="Create ADSL Dataset",
         command="prod/adam/adsl.sas",
-        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot)],
-        output_specs=[Output(name="adsl_dataset", type=DataArtifact.File(name="adsl.sas7bdat"))],
+        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=netapp_volume_snapshot)],
+        output_specs=[Output(name="adsl", type=DataArtifact.File(name="adsl.sas7bdat"))],
         environment_name=sas_environment_name,
         hardware_tier_name=hardware_tier_name,
+        netapp_volume_snapshots=[NetAppVolumeSnapshot(Id=netapp_volume_id, Version=1)],
+        main_git_repo_ref=GitRef(Type=GitRef_type, Value=GitRef_value),
         use_project_defaults_for_omitted=True,
-        cache=True,
+        cache=cache,
         cache_version="1.0"
     )
 
-     # Create task that generates ADAE dataset. 
-    adae_task = run_domino_job_task(
-        flyte_task_name="Create ADAE Dataset",
-        command="prod/adam/adae.sas",
-        inputs=[Input(name="sdtm_snapshot_task_input", type=str, value=sdtm_dataset_snapshot),
-        Input(name="adsl_dataset", type=FlyteFile[TypeVar("sas7bdat")], value=adsl_task["adsl_dataset"])],
-        output_specs=[Output(name="adae_dataset", type=DataArtifact.File(name="adae.sas7bdat"))],
-        environment_name=sas_environment_name,
-        hardware_tier_name=hardware_tier_name,
-        use_project_defaults_for_omitted=True,
-        cache=True,
-        cache_version="1.0"
-    )
 ```
 Explaining the parameters in more detail:
 
@@ -91,6 +82,8 @@ Explaining the parameters in more detail:
 - `output_specs`: The strongly typed outputs produced by my underlying task program. In this example we are giving the outputs the type DataArtifact in order to group them as Flow Artifacts.
 - `environment_name`: Name of the compute environment to use in the job. If not specified, this will point to the default compute environment.
 - `hardware_tier_name`: Name of the hardware tier to use in the job. If not specified, this will point to the default hardware tier.
+- `netapp_volume_snapshots`: ID and snapshot number of the NetApp Volume that contains your SDTM data. This will mount this snapshot to your Flow task so that the task can ingest the data.
+- `main_git_repo_ref`: Git reference for where your command task code is stored. 
 - `use_project_defaults_for_omitted`: Setting this to true means that any Job config that has not been explictly defined as a parameter will use the project default.
 - `cache`: Setting this to true enables caching for this task.
 - `cache_version`: A user defined value that specifies a version identifier for a task's cached results. It ensures that cached results are reused only if the task's logic and version remain consistent. Changing this allows users to force a rerun of the task. 
